@@ -1,6 +1,8 @@
 from selenium import webdriver
 from time import sleep
-import win32com as win32
+import smtplib
+import email.message
+
 
 
 navegador = webdriver.Chrome()
@@ -20,23 +22,33 @@ for moeda in lista_moedas:
     cotacoes.extend([valor])
 
 result = list(zip(moedas, cotacoes))
-print(result)
 
-#outlook = win32.Dispatch('Outlook.Application')
-#email = outlook.Create.Item(0)
+def enviar_email():
+    corpo_email = f'''
+    <p>Olá, segue abaixo as cotações atualizadas das moedas solicitadas:</p>
+    
+    <p>{result[0][0]}: {result[0][1]} reais</p>
+    <p>{result[1][0]}: {result[1][1]} reais</p>
+    <p>{result[2][0]}: {result[2][1]} reais</p>
+    <p>{result[3][0]}: {result[3][1]} reais</p>
+    <p>{result[4][0]}: {result[4][1]} reais</p>
+    <p>{result[5][0]}: {result[5][1]} reais</p>
+    
+    <p>Essa cotação é automatizada, valores recém atualizados.</p>'''
+    msg = email.message.Message()
+    msg['Subject'] = 'Cotações de moedas atualizadas'
+    msg['From'] = 'gustavodynia98@gmail.com'
+    msg['To'] = 'gustavodynia98@gmail.com'
+    #password deve ser gerado e alterado para a execução do programa.
+    password = '?????'
+    msg.add_header('Content-Type', 'text/html')
+    msg.set_payload(corpo_email)
 
-#email.To = 'gustavodynia98@gmail.com'
-#email.Subject = 'Teste de WebScraping'
-#email.HTMLBody = f'''<p>Olá, segue no corpo do email as cotações das moedas solicitadas.</p>
+    s = smtplib.SMTP('smtp.gmail.com: 587')
+    s.starttls()
 
-#<p>{result[0][0]} está {result[0][1]} reais</p>
-#<p>{result[1][0]} está {result[1][1]} reais</p>
-#<p>{result[2][0]} está {result[2][1]} reais</p>
-#<p>{result[3][0]} está {result[3][1]} reais</p>
-#<p>{result[4][0]} está {result[4][1]} reais</p>
-#<p>{result[5][0]} está {result[5][1]} reais</p>
+    s.login(msg['From'], password)
+    s.sendmail(msg['From'], msg['To'], msg.as_string().encode('utf-8'))
+    print('Email enviado com sucesso.')
 
-#<p>Atenciosamente,</p>
-#<p>Gustavo</p>'''
-
-#email.Send()
+enviar_email()
