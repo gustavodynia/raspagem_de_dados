@@ -5,6 +5,7 @@ import email.message
 
 
 
+
 navegador = webdriver.Chrome()
 navegador.get('https://www.google.com')
 
@@ -40,7 +41,8 @@ def enviar_email():
     msg['From'] = 'gustavodynia98@gmail.com'
     msg['To'] = 'gustavodynia98@gmail.com'
     #password deve ser gerado e alterado para a execução do programa.
-    password = '?????'
+    with open('senha.txt', 'r') as file:
+        password = file.read().strip()
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email)
 
