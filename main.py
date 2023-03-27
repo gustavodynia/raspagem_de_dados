@@ -4,8 +4,6 @@ import smtplib
 import email.message
 
 
-
-
 navegador = webdriver.Chrome()
 navegador.get('https://www.google.com')
 
