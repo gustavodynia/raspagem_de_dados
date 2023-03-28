@@ -2,7 +2,7 @@ from selenium import webdriver
 from time import sleep
 import smtplib
 import email.message
-
+from decouple import config
 
 navegador = webdriver.Chrome()
 navegador.get('https://www.google.com')
@@ -39,8 +39,7 @@ def enviar_email():
     msg['From'] = 'gustavodynia98@gmail.com'
     msg['To'] = 'gustavodynia98@gmail.com'
     #password deve ser gerado e alterado para a execução do programa.
-    with open('senha.txt', 'r') as file:
-        password = file.read().strip()
+    password = config('password')
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email)
 
